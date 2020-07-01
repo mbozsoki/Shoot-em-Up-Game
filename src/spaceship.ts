@@ -1,20 +1,61 @@
 import * as PIXI from "pixi.js";
 import Game from "./game";
-import SpaceshipImage from './assets/sprites/spaceship.png'
+import SpaceshipImage from "./assets/sprites/spaceship.png";
 
 export default class SpaceShip {
-  private game: Game;
-  private body: PIXI.Sprite;
+  private _game: Game;
+  private _body: PIXI.Sprite;
+  private _vx: number;
+  private _vy: number;
 
   constructor(game: Game, x: number, y: number) {
-    this.game = game;
-    this.body = PIXI.Sprite.from(SpaceshipImage);
-    this.body.position.x = x;
-    this.body.position.y = y;
-    this.body.anchor.x = 0.5;
-    this.body.anchor.y = 0.5;
-    this.body.width = 70;
-    this.body.height = 100;
-    this.game.stage.addChild(this.body);
+    this._game = game;
+    this._body = PIXI.Sprite.from(SpaceshipImage);
+    this._body.position.x = x;
+    this._body.position.y = y;
+    this._body.angle = 90;
+    this._body.anchor.x = 0.5;
+    this._body.anchor.y = 0.5;
+    this._body.width = 70;
+    this._body.height = 100;
+    this._game.stage.addChild(this._body);
+  }
+
+  getPositionX() {
+    return this._body.position.x;
+  }
+  getPositionY() {
+    return this._body.position.y;
+  }
+
+  get vx() {
+    return this._vx;
+  }
+  get vy() {
+    return this._vy;
+  }
+
+  setPositionX(x: number) {
+    if (isNaN(x)) {
+      return;
+    }
+
+    this._body.position.x = x;
+  }
+
+  setPositionY(y: number) {
+    if (isNaN(y)) {
+      return;
+    }
+
+    this._body.position.y = y;
+  }
+
+  set vx(vx: number) {
+    this._vx = vx;
+  }
+
+  set vy(vy: number) {
+    this._vy = vy;
   }
 }
