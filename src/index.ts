@@ -1,8 +1,6 @@
 import "index.css";
-import * as PIXI from 'pixi.js'
+import Game from "./game";
+import SpaceShip from "./spaceship";
 
-const app = new PIXI.Application({
-    width: 860,
-    height: 640
-});
-document.body.appendChild(app.view);
+const game = new Game(document.body);
+const spaceship = new SpaceShip(game, 100, 100);

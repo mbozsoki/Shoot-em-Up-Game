@@ -18,7 +18,7 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: "babel-loader",
+            loader: "ts-loader",
           },
         ],
       },
@@ -32,13 +32,8 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
-        test: /\.(jpe?g|png|gif|woff2?|eot|ttf|otf|svg)$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: { limit: 15000 },
-          },
-        ],
+        test: /\.(png|jpe?g)$/,
+        use: ["file-loader"],
       },
     ],
   },
