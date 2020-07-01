@@ -1,0 +1,29 @@
+{
+  "name": "shoot-em-up-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "build": "rm -rf public && webpack --config webpack.config.production.js --progress",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Bozsoki",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^3.6.0",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "source-map-loader": "^1.0.1",
+    "ts-loader": "^7.0.5",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "pixi.js": "5.3.0"
+  }
+}
