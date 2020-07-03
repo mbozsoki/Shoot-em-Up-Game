@@ -18,7 +18,10 @@ export default class SpaceShip {
     this._body.anchor.y = 0.5;
     this._body.width = 70;
     this._body.height = 100;
-    this._game.stage.addChild(this._body);
+  }
+
+  getSprite(): PIXI.Sprite {
+    return this._body;
   }
 
   getPositionX() {

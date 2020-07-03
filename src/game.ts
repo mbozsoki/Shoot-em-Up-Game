@@ -1,100 +1,114 @@
-import * as PIXI from "pixi.js";
 import SpaceShip from "./spaceship";
-import Keyboard from "./keyboard";
-import KeyboardHandler from "./keyboard";
+import Keyboard from "./keyboardManager";
+import KeyboardManager from "./keyboardManager";
+import ScenesManager from "./ScenesManager";
+
+enum SceneId {
+  Menu = "menu",
+  Game = "game",
+}
 
 export default class Game {
-  stage: PIXI.Container;
-  player: SpaceShip;
-  left: KeyboardHandler;
-  up: KeyboardHandler;
-  right: KeyboardHandler;
-  down: KeyboardHandler;
+  private _player: SpaceShip;
+  private _left: KeyboardManager;
+  private _up: KeyboardManager;
+  private _right: KeyboardManager;
+  private _down: KeyboardManager;
 
-  private renderer: PIXI.Renderer;
+  private scenesManager: ScenesManager;
 
   constructor(element: Element) {
-    this.setupEnvironment(element);
-    this.setupPlayer();
-    this.start();
-  }
-
-  private setupEnvironment(element: Element) {
-    this.stage = new PIXI.Container();
-    this.renderer = PIXI.autoDetectRenderer({
+    const rendererConfig = {
       width: 860,
       height: 640,
       antialias: true,
       transparent: false,
       resolution: 1,
-    });
-    element.appendChild(this.renderer.view);
+    };
+    this.scenesManager = new ScenesManager(element, rendererConfig);
+
+    this.setupScenes();
+  }
+
+  private setupScenes() {
+    this.setupMenuScene();
+    this.setupGameScene();
+
+    this.scenesManager.goToScene(SceneId.Game);
+  }
+
+  private setupMenuScene() {
+  }
+
+  private setupGameScene() {
+    const gameScene = this.scenesManager.addScene(SceneId.Game);
+    this.setupPlayer();
+    gameScene.addChild(this._player.getSprite());
+    gameScene.onUpdate(this.updatePlayer.bind(this));
   }
 
   private setupPlayer() {
-    this.player = new SpaceShip(this, 100, this.renderer.view.height / 2);
-    this.left = new Keyboard("ArrowLeft");
-    this.up = new Keyboard("ArrowUp");
-    this.right = new Keyboard("ArrowRight");
-    this.down = new Keyboard("ArrowDown");
+    this._player = new SpaceShip(
+      this,
+      100,
+      this.scenesManager.renderer.view.height / 2
+    );
+    this._left = new Keyboard("ArrowLeft");
+    this._up = new Keyboard("ArrowUp");
+    this._right = new Keyboard("ArrowRight");
+    this._down = new Keyboard("ArrowDown");
 
-    this.left.press = () => {
-      this.player.vx = -5;
-      this.player.vy = 0;
+    this._left.press = () => {
+      this._player.vx = -5;
+      this._player.vy = 0;
     };
 
-    this.left.release = () => {
-      if (!this.right.isDown && this.player.vy === 0) {
-        this.player.vx = 0;
+    this._left.release = () => {
+      if (!this._right.isDown && this._player.vy === 0) {
+        this._player.vx = 0;
       }
     };
 
-    this.up.press = () => {
-      this.player.vy = -5;
-      this.player.vx = 0;
+    this._up.press = () => {
+      this._player.vy = -5;
+      this._player.vx = 0;
     };
-    this.up.release = () => {
-      if (!this.down.isDown && this.player.vx === 0) {
-        this.player.vy = 0;
+    this._up.release = () => {
+      if (!this._down.isDown && this._player.vx === 0) {
+        this._player.vy = 0;
       }
     };
 
-    this.right.press = () => {
-      this.player.vx = 5;
-      this.player.vy = 0;
+    this._right.press = () => {
+      this._player.vx = 5;
+      this._player.vy = 0;
     };
-    this.right.release = () => {
-      if (!this.left.isDown && this.player.vy === 0) {
-        this.player.vx = 0;
+    this._right.release = () => {
+      if (!this._left.isDown && this._player.vy === 0) {
+        this._player.vx = 0;
       }
     };
 
-    this.down.press = () => {
-      this.player.vy = 5;
-      this.player.vx = 0;
+    this._down.press = () => {
+      this._player.vy = 5;
+      this._player.vx = 0;
     };
-    this.down.release = () => {
-      if (!this.up.isDown && this.player.vx === 0) {
-        this.player.vy = 0;
+    this._down.release = () => {
+      if (!this._up.isDown && this._player.vx === 0) {
+        this._player.vy = 0;
       }
     };
-  }
-
-  private start() {
-    requestAnimationFrame(this.tick.bind(this));
-  }
-
-  private tick() {
-    this.player.setPositionX(this.player.getPositionX() + this.player.vx);
-    this.player.setPositionY(this.player.getPositionY() + this.player.vy);
-    this.renderer.render(this.stage);
-    requestAnimationFrame(this.tick.bind(this));
   }
 
   private end() {
-    this.up.unsubscribe();
-    this.down.unsubscribe();
-    this.left.unsubscribe();
-    this.right.unsubscribe();
+    this._up.unsubscribe();
+    this._down.unsubscribe();
+    this._left.unsubscribe();
+    this._right.unsubscribe();
+  }
+
+  private updatePlayer() {
+    this._player.setPositionX(this._player.getPositionX() + this._player.vx);
+    this._player.setPositionY(this._player.getPositionY() + this._player.vy);
   }
 }

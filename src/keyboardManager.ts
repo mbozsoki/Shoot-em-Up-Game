@@ -1,13 +1,13 @@
-export default class KeyboardHandler {
+export default class KeyboardManager {
   private _value: string;
   private _isDown: boolean = false;
   private _isUp: boolean = true;
-  private _press: () => void;
-  private _release: () => void;
+  private _onPress: () => void;
+  private _onRelease: () => void;
 
   private keyDownHandler = (event: KeyboardEvent) => {
     if (event.key === this._value) {
-      if (this._isUp && this._press) this._press();
+      if (this._isUp && this._onPress) this._onPress();
       this._isDown = true;
       this._isUp = false;
       event.preventDefault();
@@ -16,7 +16,7 @@ export default class KeyboardHandler {
 
   private keyUpHandler = (event: KeyboardEvent) => {
     if (event.key === this._value) {
-      if (this._isDown && this._release) this._release();
+      if (this._isDown && this._onRelease) this._onRelease();
       this._isDown = false;
       this._isUp = true;
       event.preventDefault();
@@ -37,11 +37,11 @@ export default class KeyboardHandler {
   }
 
   set press(fn: () => void) {
-    this._press = fn;
+    this._onPress = fn;
   }
 
   set release(fn: () => void) {
-    this._release = fn;
+    this._onRelease = fn;
   }
 
   get isDown(): boolean {
