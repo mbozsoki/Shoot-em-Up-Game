@@ -9,7 +9,7 @@ module.exports = {
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "public"),
-    publicPath: "/",
+    publicPath: "./",
   },
   module: {
     rules: [
@@ -29,10 +29,15 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+          },
+        ],
       },
       {
-        test: /\.(png|jpe?g)$/,
+        test: /\.(png|jpe?g|gif)$/,
         use: ["file-loader"],
       },
     ],
