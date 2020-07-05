@@ -1,6 +1,11 @@
 # Shoot 'em Up Game
 
-## Develop
+## Easiest way to start the game
+
+`npm install`
+`npm run start`
+
+## Development
 
 Watch: `npm run start`
 
