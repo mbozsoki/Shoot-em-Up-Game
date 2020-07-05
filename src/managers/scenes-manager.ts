@@ -61,7 +61,7 @@ export default class ScenesManager {
   static destroyScene(id: SceneId) {
     this._scenes
       .get(id)
-      .destroy({ children: true, texture: true, baseTexture: true });
+      .destroy({ children: true, texture: false, baseTexture: false });
     this._scenes.delete(id);
   }
   private static loop() {

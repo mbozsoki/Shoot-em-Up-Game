@@ -149,7 +149,7 @@ export default class GameScene extends Scene {
   }
 
   private createBackground(texture: PIXI.Texture) {
-    const tiling = new PIXI.TilingSprite(texture, 860, 640);
+    const tiling = new PIXI.TilingSprite(texture, 800, 600);
     tiling.position.set(0, 0);
     this.addChild(tiling);
     return tiling;

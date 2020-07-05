@@ -14,8 +14,8 @@ export enum SceneId {
 export default class Game {
   constructor(element: Element) {
     const rendererConfig = {
-      width: 860,
-      height: 640,
+      width: 800,
+      height: 600,
       antialias: true,
       transparent: false,
       resolution: 1,
@@ -31,7 +31,7 @@ export default class Game {
     this.setupExitScene();
     this.setupGameScene();
 
-    ScenesManager.goToScene(SceneId.Main); // TODO splash
+    ScenesManager.goToScene(SceneId.Splash);
   }
 
   //#region Setup scenes
