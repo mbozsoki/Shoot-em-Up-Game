@@ -2,9 +2,10 @@ import SpaceShip from "./spaceship";
 import Keyboard from "./keyboardManager";
 import KeyboardManager from "./keyboardManager";
 import ScenesManager from "./ScenesManager";
+import SplashScene from "./scenes/splashScene";
 
 enum SceneId {
-  Menu = "menu",
+  Splash = "splash",
   Game = "game",
 }
 
@@ -31,20 +32,23 @@ export default class Game {
   }
 
   private setupScenes() {
-    this.setupMenuScene();
+    const splashScene = this.scenesManager.addScene(
+      SceneId.Splash,
+      SplashScene
+    );
     this.setupGameScene();
+    splashScene.onUpdate(() => {});
+    (splashScene as SplashScene).setGoToNextScene(() =>
+      this.scenesManager.goToScene(SceneId.Game)
+    );
 
-    this.scenesManager.goToScene(SceneId.Game);
-  }
-
-  private setupMenuScene() {
+    this.scenesManager.goToScene(SceneId.Splash);
   }
 
   private setupGameScene() {
     const gameScene = this.scenesManager.addScene(SceneId.Game);
     this.setupPlayer();
     gameScene.addChild(this._player.getSprite());
-    gameScene.onUpdate(this.updatePlayer.bind(this));
   }
 
   private setupPlayer() {

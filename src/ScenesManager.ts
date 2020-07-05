@@ -17,21 +17,21 @@ export default class ScenesManager {
     this._state = GameState.Stopped;
     this._renderer = PIXI.autoDetectRenderer(rendererOptions);
     element.appendChild(this._renderer.view);
-    requestAnimationFrame(this.loop);
+    requestAnimationFrame(this.loop.bind(this));
   }
 
   get renderer(): PIXI.Renderer {
     return this._renderer;
   }
 
-  addScene(id: string): Scene {
+  addScene(id: string, TScene: new () => Scene = Scene): Scene {
     if (this._scenes[id]) {
       throw new Error(
         `There is a screen already added with the given id: ${id}. Scene id should be unique.`
       );
     }
 
-    const scene = new Scene();
+    const scene = new TScene();
     this._scenes[id] = scene;
 
     return scene;
@@ -42,6 +42,7 @@ export default class ScenesManager {
       if (this._currentScene) {
         this._currentScene.pause();
       }
+      console.log(`Go to scene ${id}`)
       this._currentScene = this._scenes[id];
       this._currentScene.resume();
       if (this._state === GameState.Stopped) {

@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 
 export default class Scene extends PIXI.Container {
   private _paused: boolean = false;
-  private _updateCallback: () => void;
+  private _updateCallback: () => void = () => {};
 
   constructor() {
     super();
