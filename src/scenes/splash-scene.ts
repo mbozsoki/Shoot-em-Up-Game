@@ -1,8 +1,8 @@
 import Scene from "../entities/scene";
 import * as PIXI from "pixi.js";
-import { createTitle } from "../helpers/ui-helper";
-import ScenesManager from "../managers/scenesManager";
-import { SceneId } from "../entities/game";
+import { createTitle } from "../helpers/ui-helpers";
+import ScenesManager from "../managers/scenes-manager";
+import { SceneId } from "./game";
 
 export default class SplashScene extends Scene {
   private SPLASH_SCREEN_SHOW_DURATION = 2 * 1000;

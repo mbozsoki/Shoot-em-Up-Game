@@ -1,17 +1,17 @@
-import ScenesManager from "../managers/scenesManager";
-import SplashScene from "../scenes/splashScene";
-import GameScene from "../scenes/gameScene";
-import MainScene from "../scenes/mainScene";
+import ScenesManager from "../managers/scenes-manager";
+import SplashScene from "./splash-scene";
+import GameScene from "./game-scene";
+import MainScene from "./main-scene";
+import ExitScene from "./exit-scene";
 
 export enum SceneId {
   Splash = "splash",
   Main = "main",
+  Exit = "exit",
   Game = "game",
 }
 
 export default class Game {
-  private scenesManager: ScenesManager;
-
   constructor(element: Element) {
     const rendererConfig = {
       width: 860,
@@ -28,9 +28,10 @@ export default class Game {
   private setupScenes() {
     this.setupSplashScene();
     this.setupMainScene();
+    this.setupExitScene();
     this.setupGameScene();
 
-    ScenesManager.goToScene(SceneId.Game);  // TODO splash
+    ScenesManager.goToScene(SceneId.Main); // TODO splash
   }
 
   //#region Setup scenes
@@ -43,8 +44,18 @@ export default class Game {
     const mainScene = ScenesManager.addScene(SceneId.Main, MainScene);
   }
 
+  private setupExitScene() {
+    const exitScene = ScenesManager.addScene(SceneId.Exit, ExitScene);
+  }
+
   private setupGameScene() {
     const gameScene = ScenesManager.addScene(SceneId.Game, GameScene);
+    (gameScene as GameScene).onGameOver = this.gameOver.bind(this);
+  }
+
+  private gameOver() {
+    ScenesManager.destroyScene(SceneId.Game);
+    this.setupGameScene();
   }
 
   //#endregion Setup scenes

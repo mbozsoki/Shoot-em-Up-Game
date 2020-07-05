@@ -1,6 +1,8 @@
 import * as PIXI from "pixi.js";
 import Scene from "../entities/scene";
-import { IPixiRendererOptions } from "../types/pixiRendererOptions";
+import { IPixiRendererOptions } from "../types/pixi-renderer-options";
+import GameScene from "../scenes/game-scene";
+import { SceneId } from "../scenes/game";
 
 enum GameState {
   Stopped = "stopped",
@@ -11,7 +13,7 @@ export default class ScenesManager {
   private static _currentScene: Scene;
   private static _state: GameState;
 
-  private static _scenes: any = {};
+  private static _scenes: Map<string, Scene> = new Map<string, Scene>();
 
   constructor(element: Element, rendererOptions: IPixiRendererOptions) {
     ScenesManager._state = GameState.Stopped;
@@ -20,26 +22,31 @@ export default class ScenesManager {
     requestAnimationFrame(ScenesManager.loop.bind(ScenesManager));
   }
 
-  static addScene(id: string, TScene: new () => Scene = Scene): Scene {
-    if (ScenesManager._scenes[id]) {
+  static addScene(id: SceneId, TScene: new () => Scene = Scene): Scene {
+    if (ScenesManager._scenes.get(id)) {
       throw new Error(
         `There is a screen already added with the given id: ${id}. Scene id should be unique.`
       );
     }
 
     const scene = new TScene();
-    ScenesManager._scenes[id] = scene;
+    ScenesManager._scenes.set(id, scene);
 
     return scene;
   }
 
-  static goToScene(id: string): void {
-    if (ScenesManager._scenes[id]) {
+  static goToScene(id: SceneId): void {
+    if (ScenesManager._scenes.get(id)) {
       if (ScenesManager._currentScene) {
         ScenesManager._currentScene.pause();
       }
-      console.log(`Go to scene ${id}`)
-      ScenesManager._currentScene = ScenesManager._scenes[id];
+
+      ScenesManager._currentScene = ScenesManager._scenes.get(id);
+
+      if ((ScenesManager._currentScene as GameScene).reset) {
+        (ScenesManager._currentScene as GameScene).reset();
+      }
+
       ScenesManager._currentScene.resume();
       if (ScenesManager._state === GameState.Stopped) {
         ScenesManager._state = GameState.Playing;
@@ -50,11 +57,21 @@ export default class ScenesManager {
 
     throw new Error(`Scene is not found with the given id: ${id}`);
   }
+
+  static destroyScene(id: SceneId) {
+    this._scenes
+      .get(id)
+      .destroy({ children: true, texture: true, baseTexture: true });
+    this._scenes.delete(id);
+  }
   private static loop() {
     ScenesManager._currentScene.update();
     ScenesManager.renderer.render(ScenesManager._currentScene);
 
-    if (!ScenesManager._currentScene || ScenesManager._currentScene.isPaused()) {
+    if (
+      !ScenesManager._currentScene ||
+      ScenesManager._currentScene.isPaused()
+    ) {
       ScenesManager._state = GameState.Stopped;
       return;
     }

@@ -8,6 +8,14 @@ export default class Scene extends PIXI.Container {
     super();
   }
 
+  destroy(options?: {
+    children?: boolean;
+    texture?: boolean;
+    baseTexture?: boolean;
+}) {
+    super.destroy(options);
+  }
+
   onUpdate(updateCallback: () => void) {
     this._updateCallback = updateCallback;
   }

@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 
-export interface ITextOptions {
-  label: string;
+export interface IUiOptions {
   containerBound?: {
     width: number;
     height: number;
@@ -12,11 +11,19 @@ export interface ITextOptions {
   positionY?: number;
 }
 
-export interface IInteractiveTextOptions extends ITextOptions {
+export interface ITitleOptions extends IUiOptions {
+  label: string;
+}
+
+export interface IInteractiveTextOptions extends ITitleOptions, IUiOptions {
   onClickCallback?: () => void;
 }
 
-export function createTitle(options: ITextOptions): PIXI.Text {
+export interface ILogoOptions extends IUiOptions {
+  src: string;
+}
+
+export function createTitle(options: ITitleOptions): PIXI.Text {
   const {
     label,
     alignCenterHorizontally,
@@ -89,6 +96,39 @@ export function createButton(options: IInteractiveTextOptions) {
   button.position.set(x, y);
 
   return button;
+}
+
+export function createLogo(options: ILogoOptions) {
+  const logo = PIXI.Sprite.from(options.src);
+  logo.anchor.x = 0.5;
+  logo.anchor.y = 0.5;
+
+  const {
+    alignCenterHorizontally,
+    alignCenterVertically,
+    positionX,
+    positionY,
+  } = options;
+  let { containerBound } = options;
+  containerBound = containerBound || { width: 0, height: 0 };
+
+  let x = logo.position.x;
+  let y = logo.position.y;
+  if (alignCenterHorizontally) {
+    x = containerBound.width / 2 - logo.width / 2;
+  } else if (positionX) {
+    x = positionX;
+  }
+
+  if (alignCenterVertically) {
+    y = containerBound.height / 2 - logo.height / 2;
+  } else if (positionY) {
+    y = positionY;
+  }
+
+  logo.position.set(x, y);
+
+  return logo;
 }
 
 function getTitleStyle(): PIXI.TextStyle {
