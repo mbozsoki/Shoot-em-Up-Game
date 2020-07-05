@@ -2,13 +2,17 @@ import Scene from "../entities/scene";
 import SpaceShip from "../entities/spaceship";
 import KeyboardManager from "../managers/keyboardManager";
 import ScenesManager from "../managers/scenesManager";
+import Projectile from "../entities/projectile";
 
 export default class GameScene extends Scene {
-  private _player: SpaceShip;
   private _left: KeyboardManager;
   private _up: KeyboardManager;
   private _right: KeyboardManager;
   private _down: KeyboardManager;
+  private _space: KeyboardManager;
+
+  private _player: SpaceShip;
+  private _projectiles: Projectile[] = [];
 
   constructor() {
     super();
@@ -21,6 +25,13 @@ export default class GameScene extends Scene {
     super.update();
     this._player.setPositionX(this.calculatePlayerNextPositionX());
     this._player.setPositionY(this.calculatePlayerNextPositionY());
+    this._projectiles.forEach((projectile) => {
+      if (projectile.getPositionX() > ScenesManager.renderer.view.width) {
+        this.removeChild(projectile.getSprite());
+      } else {
+        projectile.setPositionX(projectile.getPositionX() + projectile.vx);
+      }
+    });
   }
 
   private calculatePlayerNextPositionX(): number {
@@ -63,6 +74,7 @@ export default class GameScene extends Scene {
     this._down.unsubscribe();
     this._left.unsubscribe();
     this._right.unsubscribe();
+    this._space.unsubscribe();
   }
 
   private setupPlayer() {
@@ -75,6 +87,7 @@ export default class GameScene extends Scene {
     this._up = new KeyboardManager("ArrowUp");
     this._right = new KeyboardManager("ArrowRight");
     this._down = new KeyboardManager("ArrowDown");
+    this._space = new KeyboardManager("Space");
 
     this._left.press = () => {
       this._player.vx = -5;
@@ -115,6 +128,15 @@ export default class GameScene extends Scene {
       if (!this._up.isDown && this._player.vx === 0) {
         this._player.vy = 0;
       }
+    };
+
+    this._space.press = () => {
+      const projectile = new Projectile(
+        this._player.getPositionX(),
+        this._player.getPositionY()
+      );
+      this._projectiles.push(projectile);
+      this.addChild(projectile.getSprite());
     };
   }
 }

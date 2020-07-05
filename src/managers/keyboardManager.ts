@@ -6,7 +6,7 @@ export default class KeyboardManager {
   private _onRelease: () => void;
 
   private keyDownHandler = (event: KeyboardEvent) => {
-    if (event.key === this._value) {
+    if (event.code === this._value) {
       if (this._isUp && this._onPress) this._onPress();
       this._isDown = true;
       this._isUp = false;
@@ -15,7 +15,7 @@ export default class KeyboardManager {
   };
 
   private keyUpHandler = (event: KeyboardEvent) => {
-    if (event.key === this._value) {
+    if (event.code === this._value) {
       if (this._isDown && this._onRelease) this._onRelease();
       this._isDown = false;
       this._isUp = true;
