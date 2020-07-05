@@ -8,7 +8,7 @@ export default class SplashScene extends Scene {
 
   private _shouldFadeOut: boolean = false;
   private _opacity = 1;
-  private _goToNextScene: () => void;
+  private _goToNextSceneCallback: () => void;
 
   constructor() {
     super();
@@ -29,6 +29,10 @@ export default class SplashScene extends Scene {
     }, this.SPLASH_SCREEN_SHOW_DURATION);
   }
 
+  
+  set goToNextSceneCallback(cb: () => void) {
+    this._goToNextSceneCallback = cb;
+}
   update() {
     super.update();
     if (this._shouldFadeOut && this._opacity > 0) {
@@ -36,12 +40,8 @@ export default class SplashScene extends Scene {
     }
 
     if (this._opacity <= 0) {
-        this._goToNextScene();
+        this._goToNextSceneCallback();
     }
-  }
-
-  setGoToNextScene(cb: () => void) {
-      this._goToNextScene = cb;
   }
 
   private getTitleStyle(): PIXI.TextStyle {

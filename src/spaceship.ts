@@ -3,13 +3,11 @@ import Game from "./game";
 import SpaceshipImage from "./assets/sprites/spaceship.png";
 
 export default class SpaceShip {
-  private _game: Game;
   private _body: PIXI.Sprite;
   private _vx: number;
   private _vy: number;
 
-  constructor(game: Game, x: number, y: number) {
-    this._game = game;
+  constructor(x: number, y: number) {
     this._body = PIXI.Sprite.from(SpaceshipImage);
     this._body.position.x = x;
     this._body.position.y = y;
