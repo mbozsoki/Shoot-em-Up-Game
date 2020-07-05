@@ -4,7 +4,6 @@ import KeyboardManager from "../managers/keyboardManager";
 import ScenesManager from "../managers/scenesManager";
 
 export default class GameScene extends Scene {
-
   private _player: SpaceShip;
   private _left: KeyboardManager;
   private _up: KeyboardManager;
@@ -20,8 +19,42 @@ export default class GameScene extends Scene {
 
   update() {
     super.update();
-    this._player.setPositionX(this._player.getPositionX() + this._player.vx);
-    this._player.setPositionY(this._player.getPositionY() + this._player.vy);
+    this._player.setPositionX(this.calculatePlayerNextPositionX());
+    this._player.setPositionY(this.calculatePlayerNextPositionY());
+  }
+
+  private calculatePlayerNextPositionX(): number {
+    let nextPositionX = this._player.getPositionX() + this._player.vx;
+    const maxPositionX =
+      ScenesManager.renderer.view.width - this._player.width / 2;
+    const minPositionX = this._player.width / 2;
+
+    if (nextPositionX < minPositionX) {
+      return minPositionX;
+    }
+
+    if (nextPositionX > maxPositionX) {
+      return maxPositionX;
+    }
+
+    return nextPositionX;
+  }
+
+  private calculatePlayerNextPositionY(): number {
+    let nextPositionY = this._player.getPositionY() + this._player.vy;
+    const maxPositionY =
+      ScenesManager.renderer.view.height - this._player.height / 2;
+    const minPositionY = this._player.height / 2;
+
+    if (nextPositionY < minPositionY) {
+      return minPositionY;
+    }
+
+    if (nextPositionY > maxPositionY) {
+      return maxPositionY;
+    }
+
+    return nextPositionY;
   }
 
   // TODO call on game over

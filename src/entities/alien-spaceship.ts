@@ -1,21 +1,20 @@
 import * as PIXI from "pixi.js";
-import SpaceshipImage from "../assets/sprites/spaceship.gif";
+import AlienSpaceshipImage from "../assets/sprites/alien-spaceship.png";
 
 export default class SpaceShip {
   private _body: PIXI.Sprite;
   private _vx: number;
   private _vy: number;
-  private _width: number;
-  private _height: number;
 
   constructor(x: number, y: number) {
-    this._body = PIXI.Sprite.from(SpaceshipImage);
+    this._body = PIXI.Sprite.from(AlienSpaceshipImage);
     this._body.position.x = x;
     this._body.position.y = y;
+    this._body.angle = 90;
     this._body.anchor.x = 0.5;
     this._body.anchor.y = 0.5;
-    this._width = this._body.width = 90;
-    this._height = this._body.height = 35;
+    this._body.width = 70;
+    this._body.height = 100;
   }
 
   getSprite(): PIXI.Sprite {
@@ -34,14 +33,6 @@ export default class SpaceShip {
   }
   get vy() {
     return this._vy;
-  }
-
-  get width() {
-    return this._width;
-  }
-
-  get height() {
-    return this._height;
   }
 
   setPositionX(x: number) {

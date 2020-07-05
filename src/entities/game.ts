@@ -30,7 +30,7 @@ export default class Game {
     this.setupMainScene();
     this.setupGameScene();
 
-    ScenesManager.goToScene(SceneId.Splash);
+    ScenesManager.goToScene(SceneId.Game);  // TODO splash
   }
 
   //#region Setup scenes
