@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
-import Game from "./game";
-import SpaceshipImage from "./assets/sprites/spaceship.png";
+import SpaceshipImage from "../assets/sprites/spaceship.png";
 
 export default class SpaceShip {
   private _body: PIXI.Sprite;

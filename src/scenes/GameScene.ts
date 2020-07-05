@@ -1,9 +1,9 @@
-import Scene from "../scene";
-import SpaceShip from "../spaceship";
-import KeyboardManager from "../keyboardManager";
+import Scene from "../entities/scene";
+import SpaceShip from "../entities/spaceship";
+import KeyboardManager from "../managers/keyboardManager";
+import ScenesManager from "../managers/scenesManager";
 
 export default class GameScene extends Scene {
-  private _quitToMainMenuCallback: () => void;
 
   private _player: SpaceShip;
   private _left: KeyboardManager;
@@ -16,10 +16,6 @@ export default class GameScene extends Scene {
 
     this.setupPlayer();
     this.addChild(this._player.getSprite());
-  }
-
-  set quitToMainMenuCallback(cb: () => void) {
-    this._quitToMainMenuCallback = cb;
   }
 
   update() {
@@ -37,8 +33,7 @@ export default class GameScene extends Scene {
   }
 
   private setupPlayer() {
-    const viewHeight = 860; // TODO
-    this._player = new SpaceShip(100, viewHeight / 2);
+    this._player = new SpaceShip(100, ScenesManager.renderer.view.height / 2);
     this.setupKeypressHandlers();
   }
 
